@@ -1,4 +1,4 @@
-void gerarPalavraSecreta(char palavraSecreta[20]);
+void escolherPalavra(char palavraSecreta[20]);
 void imprimirCabecalho(void);
 void desenharForca(char palavraSecreta[20], char chutes[26], int chutesDados);
 void guardarChute(char chutes[26], int* chutesDados);

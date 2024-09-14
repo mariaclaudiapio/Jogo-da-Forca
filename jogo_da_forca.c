@@ -1,11 +1,35 @@
 #include <stdio.h>
 #include <string.h> // para o uso da função strlen (que mede o tamanho do array)
+#include <time.h> // para uso da função time
+#include <stdlib.h> // para uso da função rand
 
 #include "header.h"
 
-void gerarPalavraSecreta(char palavraSecreta[20])
+void escolherPalavra(char palavraSecreta[20])
 {
-    sprintf(palavraSecreta, "MELANCIA");
+    FILE* f;
+    f = fopen("palavras.txt", "r"); // abre e lê o arquivo leitura
+    if(f == 0)
+    {
+        puts("Falha de memória");
+        puts("Por favor, contacte a anta do programador que fez isso!");
+        exit(1);
+    }
+
+    int quantidadePalavras;
+    fscanf(f, "%d", &quantidadePalavras); // lê o primeiro valor que está
+                                         // na linha (número total de palavras)
+
+    // escolhe uma palavra do arquivo de forma randômica
+    srand(time(0));
+    int randomico = rand() % quantidadePalavras;
+
+    for(int i = 0; i <= randomico; i++)
+    {
+        fscanf(f, "%s", palavraSecreta);
+    }
+
+    fclose(f);
 }
 
 void imprimirCabecalho(void)
@@ -107,7 +131,7 @@ int main()
     char chutes[26]; // armazena os chutes do usuário
     int chutesDados = 0;
 
-    gerarPalavraSecreta(palavraSecreta);
+    escolherPalavra(palavraSecreta);
 
     imprimirCabecalho();
 
