@@ -5,16 +5,21 @@
 
 #include "header.h"
 
+void verificarExistênciaDoArquivo(FILE * f)
+{
+    if(f == 0)
+    {
+        puts("Falha ao abrir o arquivo");       
+        exit(1);
+    }
+}
+
 void escolherPalavra(char palavraSecreta[20])
 {
     FILE* f;
     f = fopen("palavras.txt", "r"); // abre e lê o arquivo leitura
-    if(f == 0)
-    {
-        puts("Falha de memória");
-        puts("Por favor, contacte a anta do programador que fez isso!");
-        exit(1);
-    }
+
+    verificarExistênciaDoArquivo(f);    
 
     int quantidadePalavras;
     fscanf(f, "%d", &quantidadePalavras); // lê o primeiro valor que está
@@ -123,6 +128,40 @@ int enforcou(char palavraSecreta[20], char chutes [26], int* chutesDados)
     return erros >= 5;
 }
 
+void adicionaPalavra()
+{
+    char escolha;
+
+    puts("Você deseja adicionar uma nova palavra ao banco de dados?");
+    puts("Digite 'S' para sim e 'N' para não.");
+    scanf(" %c", &escolha);
+
+    if(escolha == 'S')
+    {
+        char novaPalavra[20];
+        puts("Qual a nova palavra?");
+        puts("(Digite em caixa alta sem usar caracteres especiais)");
+        scanf("%s", novaPalavra);
+
+        FILE* f;
+        f = fopen("palavras.txt", "r+");
+
+        verificarExistênciaDoArquivo(f);
+
+        int quantidade;
+        fscanf(f, "%d", &quantidade);
+        quantidade++;
+
+        fseek(f, 0, SEEK_SET); // posiciona o leitor no início do arquivo
+        fprintf(f, "%d", quantidade);
+
+        fseek(f, 0, SEEK_END); // posiciona o leitor no final do arquivo
+        fprintf(f, "\n%s", novaPalavra);
+
+        fclose(f);
+    }
+}
+
 int main()
 {
     // criação e inicialização do array de palavras (funcionando como string)
@@ -144,6 +183,34 @@ int main()
     while (!acertou(palavraSecreta, chutes, chutesDados) && !enforcou(palavraSecreta, chutes, &chutesDados));
 
     printf("%s\n", palavraSecreta);
+
+    if(acertou(palavraSecreta, chutes, chutesDados))
+    {
+        puts("");
+        puts("** Parabéns, você descobriu a palavra secreta! **");
+        puts("\t\t     _______________");
+        puts("\t\t    |@@@@|     |####|");        
+        puts("\t\t    |@@@@|     |####|");
+        puts("\t\t    |@@@@|     |####|");
+        puts("\t\t    \\@@@@|     |####/");
+        puts("\t\t     \\@@@|     |###/");
+        puts("\t\t      `@@|_____|##'");
+        puts("\t\t           (O)");
+        puts("\t\t        .-'''''-.");
+        puts("\t\t      .'  * * *  `.");
+        puts("\t\t     :  *       *  :");
+        puts("\t\t    : ~ F O R C A ~ :");
+        puts("\t\t    : ~ A W A R D ~ :");
+        puts("\t\t     :  *       *  :");
+        puts("\t\tjgs   `.  * * *  .'");
+        puts("\t\t        `-.....-'");
+        puts("");
+    }
+    else
+    {
+        printf("Sorry! You lost!");
+    }
+    
 
     return 0;
 }
